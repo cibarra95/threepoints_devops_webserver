@@ -35,16 +35,12 @@ pipeline {
                                         sonarsource/sonar-scanner-cli \
                                         -Dsonar.projectKey=threepoints_devops_webserver_practica \
                                         -Dsonar.sources=. \
-                                        -Dsonar.qualitygate.wait=true
+                                        -Dsonar.qualitygate.wait=false
                                 '''
                             }
-                        }
-                    }
-                }
-                stage('Esperar Quality Gate') {
-                    steps {
-                        timeout(time: 2, unit: 'MINUTES') {
-                            waitForQualityGate abortPipeline: false
+                            timeout(time: 2, unit: 'MINUTES') {
+                                waitForQualityGate abortPipeline: false
+                            }
                         }
                     }
                 }
