@@ -1,7 +1,8 @@
 pipeline {
     agent any
     tools {
-        git 'Default'
+        git 'Default',
+        sonarQubeScanner 'SonarQube'
     }
     environment {
         SONAR_HOST_URL = 'http://host.docker.internal:9000'
@@ -38,6 +39,20 @@ pipeline {
                                         -Dsonar.qualitygate.wait=false
                                 '''
                             }
+                        }
+                        timeout(time: 60, unit: 'MINUTES') {
+                            waitForQualityGate abortPipeline: false
+                        }
+                    }
+                }
+                stage('prueba 2'){
+                    steps {
+                        withSonarQubeEnv('SonarQube') {
+                            sh '''
+                                withSonarQubeEnv('SonarQube') {
+                                    sh 'sonar-scanner -Dsonar.projectKey=threepoints_devops_webserver_practica -Dsonar.sources=app/SIC -Dsonar.projectBaseDir=app'
+                                }
+                            '''
                         }
                         timeout(time: 60, unit: 'MINUTES') {
                             waitForQualityGate abortPipeline: false
