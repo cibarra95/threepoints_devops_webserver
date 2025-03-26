@@ -39,7 +39,13 @@ pipeline {
                                 '''
                             }
                         }
-                        waitForQualityGate abortPipeline: false
+                    }
+                }
+                stage('Esperar Quality Gate') {
+                    steps {
+                        timeout(time: 2, unit: 'MINUTES') {
+                            waitForQualityGate abortPipeline: false
+                        }
                     }
                 }
                 stage('Imprimir Env'){
