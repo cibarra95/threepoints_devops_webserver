@@ -22,7 +22,7 @@ pipeline {
         }
         stage('Paralelo SAST + Env') {
             parallel {
-                stage('Pruebas de SAST') {
+                stage('Pruebas de SAST with sonar-scanner') {
                     steps {
                         withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                             withSonarQubeEnv('SonarQube') {
