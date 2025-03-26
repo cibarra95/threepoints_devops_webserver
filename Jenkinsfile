@@ -25,20 +25,22 @@ pipeline {
                 stage('Pruebas de SAST') {
                     steps {
                         withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                            withSonarQubeEnv('SonarQube') {
-                                sh '''
+                            script {
+                                def scannerHome = tool 'SonarQube'
+                                sh """
                                     docker run --rm --network devops-net \
                                         -e SONAR_HOST_URL=$SONAR_HOST_URL \
                                         -e SONAR_TOKEN=$SONAR_TOKEN \
-                                        -v $(pwd)/app:/usr/src \
+                                        -v \$(pwd)/app:/usr/src \
                                         -w /usr/src/SIC \
                                         sonarsource/sonar-scanner-cli \
                                         -Dsonar.projectKey=threepoints_devops_webserver_practica \
                                         -Dsonar.sources=. \
                                         -Dsonar.qualitygate.wait=true
-                                '''
+                                """
                             }
                         }
+                        waitForQualityGate abortPipeline: false
                     }
                 }
                 stage('Imprimir Env'){
