@@ -8,10 +8,10 @@ pipeline {
     }
     stages {
         stage('Clean Workspace') {
-                    steps {
-                        deleteDir()
-                    }
-                }
+            steps {
+                deleteDir()
+            }
+        }
         stage('Checkout') {
             steps {
                 sh 'rm -rf app && git clone https://github.com/cibarra95/threepoints_devops_webserver.git app'
