@@ -27,6 +27,23 @@ pipeline {
                         withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                             withSonarQubeEnv('SonarQube') {
                                 sh '''
+                                    sonar-scanner \
+                                        -Dsonar.projectKey=threepoints_devops_webserver_practica \
+                                        -Dsonar.sources=app/SIC \
+                                        -Dsonar.projectBaseDir=app
+                                '''
+                            }
+                        }
+                        timeout(time: 10, unit: 'MINUTES') {
+                            waitForQualityGate abortPipeline: false
+                        }
+                    }
+                }
+                stage('Pruebas de SAST') {
+                    steps {
+                        withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                            withSonarQubeEnv('SonarQube') {
+                                sh '''
                                     docker run --rm --network devops-net \
                                         -e SONAR_HOST_URL=$SONAR_HOST_URL \
                                         -e SONAR_TOKEN=$SONAR_TOKEN \
@@ -39,7 +56,7 @@ pipeline {
                                 '''
                             }
                         }
-                        timeout(time: 1, unit: 'MINUTES') {
+                        timeout(time: 10, unit: 'MINUTES') {
                             waitForQualityGate abortPipeline: false
                         }
                     }
