@@ -29,7 +29,7 @@ pipeline {
                                 docker run --rm \
                                     -e SONAR_HOST_URL=$SONAR_HOST_URL \
                                     -e SONAR_TOKEN=$SONAR_TOKEN \
-                                    -v $(pwd)/app:/usr/src \
+                                    -v \$(pwd)/app:/usr/src \
                                     -w /usr/src/SIC \
                                     sonarsource/sonar-scanner-cli \
                                     -Dsonar.projectKey=threepoints_devops_webserver_practica \
