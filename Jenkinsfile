@@ -26,7 +26,7 @@ pipeline {
                     steps {
                         withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                             withSonarQubeEnv('SonarQube') {
-                                sh '''
+                                sh """
                                     docker run --rm \
                                         -e SONAR_HOST_URL=$SONAR_HOST_URL \
                                         -e SONAR_TOKEN=$SONAR_TOKEN \
@@ -36,7 +36,7 @@ pipeline {
                                         -Dsonar.projectKey=threepoints_devops_webserver_practica \
                                         -Dsonar.sources=. \
                                         -Dsonar.qualitygate.wait=true
-                                '''
+                                """
                             }
                         }
                         timeout(time: 1, unit: 'MINUTES') {
