@@ -24,19 +24,21 @@ pipeline {
             parallel {
                 stage('Pruebas de SAST'){
                     steps {
-                        withSonarQubeEnv('SonarQube') {
-                            withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                                sh '''
-                                    docker run --rm --network devops-net \
-                                        -e SONAR_HOST_URL=$SONAR_HOST_URL \
-                                        -e SONAR_TOKEN=$SONAR_TOKEN \
-                                        -v $(pwd)/app:/usr/src \
-                                        -w /usr/src/SIC \
-                                        sonarsource/sonar-scanner-cli \
-                                        -Dsonar.projectKey=threepoints_devops_webserver_practica \
-                                        -Dsonar.sources=. \
-                                        -Dsonar.qualitygate.wait=true
-                                '''
+                        script {
+                            withSonarQubeEnv('SonarQube') {
+                                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                                    sh '''
+                                        docker run --rm --network devops-net \
+                                            -e SONAR_HOST_URL=$SONAR_HOST_URL \
+                                            -e SONAR_TOKEN=$SONAR_TOKEN \
+                                            -v $(pwd)/app:/usr/src \
+                                            -w /usr/src/SIC \
+                                            sonarsource/sonar-scanner-cli \
+                                            -Dsonar.projectKey=threepoints_devops_webserver_practica \
+                                            -Dsonar.sources=. \
+                                            -Dsonar.qualitygate.wait=true
+                                    '''
+                                }
                             }
                         }
                         timeout(time: 1, unit: 'MINUTES') {
