@@ -38,9 +38,9 @@ pipeline {
                                         -Dsonar.qualitygate.wait=false
                                 '''
                             }
-                            timeout(time: 2, unit: 'MINUTES') {
-                                waitForQualityGate abortPipeline: false
-                            }
+                        }
+                        timeout(time: 60, unit: 'MINUTES') {
+                            waitForQualityGate abortPipeline: false
                         }
                     }
                 }
