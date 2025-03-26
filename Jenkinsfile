@@ -24,12 +24,12 @@ pipeline {
             parallel {
                 stage('Pruebas de SAST'){
                     steps {
-                        withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                            withSonarQubeEnv('SonarQube') {
+                        withSonarQubeEnv('SonarQube') {
+                            withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                                 sh '''
                                     docker run --rm \
-                                        -e SONAR_HOST_URL="${SONAR_HOST_URL}" \
-                                        -e SONAR_TOKEN="${SONAR_TOKEN}" \
+                                        -e SONAR_HOST_URL=$SONAR_HOST_URL \
+                                        -e SONAR_TOKEN=$SONAR_TOKEN \
                                         -v $(pwd)/app:/usr/src \
                                         -w /usr/src/SIC \
                                         sonarsource/sonar-scanner-cli \
