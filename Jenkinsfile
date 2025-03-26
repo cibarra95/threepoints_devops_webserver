@@ -1,9 +1,5 @@
 pipeline {
     agent any
-    tools {
-        git 'Default',
-        sonarQubeScanner 'SonarQube'
-    }
     environment {
         SONAR_HOST_URL = 'http://host.docker.internal:9000'
     }
