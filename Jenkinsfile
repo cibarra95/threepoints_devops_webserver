@@ -33,6 +33,7 @@ pipeline {
                                         -Dsonar.projectBaseDir=app \
                                         -Dsonar.login=$SONAR_TOKEN
                                 '''
+                            }
                         }
                         timeout(time: 1, unit: 'MINUTES') {
                             waitForQualityGate abortPipeline: false
