@@ -22,10 +22,10 @@ pipeline {
         }
         stage('Paralelo SAST + Env') {
             parallel {
-                stage('Pruebas de SAST'){
+                stage('Pruebas de SAST') {
                     steps {
-                        withSonarQubeEnv('SonarQube') {
-                            withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                        withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                            withSonarQubeEnv('SonarQube') {
                                 sh '''
                                     docker run --rm --network devops-net \
                                         -e SONAR_HOST_URL=$SONAR_HOST_URL \
@@ -37,7 +37,7 @@ pipeline {
                                         -Dsonar.sources=. \
                                         -Dsonar.qualitygate.wait=true
                                 '''
-                                }
+                            }
                         }
                         timeout(time: 1, unit: 'MINUTES') {
                             waitForQualityGate abortPipeline: false
