@@ -24,22 +24,15 @@ pipeline {
             parallel {
                 stage('Pruebas de SAST'){
                     steps {
-                        script {
-                            withSonarQubeEnv('SonarQube') {
-                                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                                    sh '''
-                                        docker run --rm --network devops-net \
-                                            -e SONAR_HOST_URL=$SONAR_HOST_URL \
-                                            -e SONAR_TOKEN=$SONAR_TOKEN \
-                                            -v $(pwd)/app:/usr/src \
-                                            -w /usr/src/SIC \
-                                            sonarsource/sonar-scanner-cli \
-                                            -Dsonar.projectKey=threepoints_devops_webserver_practica \
-                                            -Dsonar.sources=. \
-                                            -Dsonar.qualitygate.wait=true
-                                    '''
-                                }
-                            }
+                        withSonarQubeEnv('SonarQube') {
+                            withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                                sh '''
+                                    sonar-scanner \
+                                        -Dsonar.projectKey=threepoints_devops_webserver_practica \
+                                        -Dsonar.sources=app/SIC \
+                                        -Dsonar.projectBaseDir=app \
+                                        -Dsonar.login=$SONAR_TOKEN
+                                '''
                         }
                         timeout(time: 1, unit: 'MINUTES') {
                             waitForQualityGate abortPipeline: false
