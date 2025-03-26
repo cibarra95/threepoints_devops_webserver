@@ -57,7 +57,6 @@ pipeline {
                             sonarsource/sonar-scanner-cli \
                             -Dsonar.projectKey=threepoints_devops_webserver_practica \
                             -Dsonar.sources=. \
-                            -Dsonar.branch.name=master
                     '''
                 }
             }
