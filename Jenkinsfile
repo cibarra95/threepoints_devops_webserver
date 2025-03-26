@@ -26,10 +26,15 @@ pipeline {
                     steps {
                         withSonarQubeEnv('SonarQube') {
                             sh '''
-                                sonar-scanner \
+                                docker run --rm --network devops-net \
+                                    -e SONAR_HOST_URL=$SONAR_HOST_URL \
+                                    -e SONAR_TOKEN=$SONAR_TOKEN \
+                                    -v $(pwd)/app:/usr/src \
+                                    -w /usr/src/SIC \
+                                    sonarsource/sonar-scanner-cli \
                                     -Dsonar.projectKey=threepoints_devops_webserver_practica \
-                                    -Dsonar.sources=app/SIC \
-                                    -Dsonar.projectBaseDir=app
+                                    -Dsonar.sources=. \
+                                    -Dsonar.qualitygate.wait=true
                             '''
                         }
                         timeout(time: 1, unit: 'MINUTES') {
