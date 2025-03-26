@@ -22,23 +22,6 @@ pipeline {
         }
         stage('Paralelo SAST + Env') {
             parallel {
-                stage('Pruebas de SAST with sonar-scanner') {
-                    steps {
-                        withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                            withSonarQubeEnv('SonarQube') {
-                                sh '''
-                                    sonar-scanner \
-                                        -Dsonar.projectKey=threepoints_devops_webserver_practica \
-                                        -Dsonar.sources=app/SIC \
-                                        -Dsonar.projectBaseDir=app
-                                '''
-                            }
-                        }
-                        timeout(time: 10, unit: 'MINUTES') {
-                            waitForQualityGate abortPipeline: false
-                        }
-                    }
-                }
                 stage('Pruebas de SAST') {
                     steps {
                         withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
@@ -55,9 +38,6 @@ pipeline {
                                         -Dsonar.qualitygate.wait=true
                                 '''
                             }
-                        }
-                        timeout(time: 10, unit: 'MINUTES') {
-                            waitForQualityGate abortPipeline: false
                         }
                     }
                 }
