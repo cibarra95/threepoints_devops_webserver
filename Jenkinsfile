@@ -43,7 +43,7 @@ pipeline {
         }
         stage('Configurar archivo') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'Credentials_Threepoints', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'Credentials_Threepoints_Practica', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                     sh '''
                         echo "[credentials]" > credentials.ini
                         echo "user=${USER}" >> credentials.ini
