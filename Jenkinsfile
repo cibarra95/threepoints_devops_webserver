@@ -24,8 +24,8 @@ pipeline {
             parallel {
                 stage('Pruebas de SAST'){
                     steps {
-                        withSonarQubeEnv('SonarQube') {
-                            withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                        withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                            withSonarQubeEnv('SonarQube') {
                                 sh '''
                                     sonar-scanner \
                                         -Dsonar.projectKey=threepoints_devops_webserver_practica \
