@@ -41,6 +41,18 @@ pipeline {
                 }
             }
         }
+        stage('Configurar archivo') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'Credentials_Threepoints', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh '''
+                        echo "[credentials]" > credentials.ini
+                        echo "user=${USER}" >> credentials.ini
+                        echo "password=${PASS}" >> credentials.ini
+                    '''
+                    archiveArtifacts artifacts: 'credentials.ini', onlyIfSuccessful: true
+                }
+            }
+        }
         stage('Build') {
             steps {
                 sh 'docker build -t devops_ws app'
