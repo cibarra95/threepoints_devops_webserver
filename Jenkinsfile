@@ -29,7 +29,14 @@ pipeline {
                 }
                 stage('Imprimir Env'){
                     steps {
-                        echo "El workspace es: ${env.WORKSPACE}"
+                        sh '''
+                            echo "==== Imprimir Env ===="
+                            printenv
+                            echo "==== Fin Env ===="
+                            echo "<==== Ruta y contenido del workspace ====>"
+                            pwd
+                            ls -la
+                        '''
                     }
                 }
             }
