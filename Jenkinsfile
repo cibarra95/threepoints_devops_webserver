@@ -69,5 +69,17 @@ pipeline {
                 sh 'docker build -t devops_ws app'
             }
         }
+        stage('Despliegue del servidor') {
+            steps {
+                sh '''
+                    echo "Deteniendo contenedor anterior si existe..."
+                    docker stop devops || true
+                    docker rm devops || true
+
+                    echo "Desplegando nuevo contenedor del servidor..."
+                    docker run -d -p 8090:8090 --name devops devops_ws
+                '''
+            }
+        }
     }
 }
