@@ -43,11 +43,14 @@ pipeline {
                 }
                 stage('prueba 2'){
                     steps {
-                        sh '''
-                            withSonarQubeEnv('SonarQube') {
-                                sh 'sonar-scanner -Dsonar.projectKey=threepoints_devops_webserver_practica -Dsonar.sources=app/SIC -Dsonar.projectBaseDir=app'
-                            }
-                        '''
+                        withSonarQubeEnv('SonarQube') {
+                            sh '''
+                                sonar-scanner \
+                                    -Dsonar.projectKey=threepoints_devops_webserver_practica \
+                                    -Dsonar.sources=app/SIC \
+                                    -Dsonar.projectBaseDir=app
+                            '''
+                        }
                         timeout(time: 60, unit: 'MINUTES') {
                             waitForQualityGate abortPipeline: false
                         }
